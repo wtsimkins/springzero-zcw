@@ -12,10 +12,9 @@ This guide walks you through the process of creating a "hello world" link:/under
 
 You'll build a service that will accept HTTP GET requests at:
 
-----
+```
 http://localhost:8080/greeting
-----
-
+```
 and respond with a link:/understanding/JSON[JSON] representation of a greeting:
 
 [source,json]
