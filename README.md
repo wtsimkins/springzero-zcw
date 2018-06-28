@@ -1,14 +1,6 @@
-:spring_version: current
-:toc:
-:project_id: gs-rest-service
-:spring_version: current
-:spring_boot_version: 2.0.3.RELEASE
-:icons: font
-:source-highlighter: prettify
-
 This guide walks you through the process of creating a "hello world" link:/understanding/REST[RESTful web service] with Spring.
 
-== What you'll build
+*** What you'll build
 
 You'll build a service that will accept HTTP GET requests at:
 
@@ -17,26 +9,26 @@ http://localhost:8080/greeting
 ```
 and respond with a link:/understanding/JSON[JSON] representation of a greeting:
 
-[source,json]
-----
+
+```
 {"id":1,"content":"Hello, World!"}
-----
+```
 
 You can customize the greeting with an optional `name` parameter in the query string:
 
-----
+```
 http://localhost:8080/greeting?name=User
-----
+```
 
 The `name` parameter value overrides the default value of "World" and is reflected in the response:
 
-[source,json]
-----
+
+```
 {"id":1,"content":"Hello, User!"}
-----
+```
 
 
-== What you'll need
+*** What you'll need
 
 :java_version: 1.8
 include::https://raw.githubusercontent.com/spring-guides/getting-started-macros/master/prereq_editor_jdk_buildtools.adoc[]
@@ -53,7 +45,7 @@ include::https://raw.githubusercontent.com/spring-guides/getting-started-macros/
 
 
 [[initial]]
-== Create a resource representation class
+*** Create a resource representation class
 
 Now that you've set up the project and build system, you can create your web service.
 
@@ -61,38 +53,38 @@ Begin the process by thinking about service interactions.
 
 The service will handle `GET` requests for `/greeting`, optionally with a `name` parameter in the query string. The `GET` request should return a `200 OK` response with JSON in the body that represents a greeting. It should look something like this:
 
-[source,json]
-----
+
+```
 {
     "id": 1,
     "content": "Hello, World!"
 }
-----
+```
 
 The `id` field is a unique identifier for the greeting, and `content` is the textual representation of the greeting.
 
 To model the greeting representation, you create a resource representation class. Provide a plain old java object with fields, constructors, and accessors for the `id` and `content` data:
 
 `src/main/java/hello/Greeting.java`
-[source,java]
-----
+
+```
 include::complete/src/main/java/hello/Greeting.java[]
-----
+```
 
 NOTE: As you see in steps below, Spring uses the http://wiki.fasterxml.com/JacksonHome[Jackson JSON] library to automatically marshal instances of type `Greeting` into JSON.
 
 Next you create the resource controller that will serve these greetings.
 
 
-== Create a resource controller
+*** Create a resource controller
 
 In Spring's approach to building RESTful web services, HTTP requests are handled by a controller. These components are easily identified by the http://docs.spring.io/spring/docs/{spring_version}/javadoc-api/org/springframework/web/bind/annotation/RestController.html[`@RestController`] annotation, and the `GreetingController` below handles `GET` requests for `/greeting` by returning a new instance of the `Greeting` class:
 
 `src/main/java/hello/GreetingController.java`
-[source,java]
-----
+
+```
 include::complete/src/main/java/hello/GreetingController.java[]
-----
+```
 
 This controller is concise and simple, but there's plenty going on under the hood. Let's break it down step by step.
 
@@ -111,16 +103,16 @@ This code uses Spring 4's new http://docs.spring.io/spring/docs/{spring_version}
 The `Greeting` object must be converted to JSON. Thanks to Spring's HTTP message converter support, you don't need to do this conversion manually. Because http://wiki.fasterxml.com/JacksonHome[Jackson 2] is on the classpath, Spring's http://docs.spring.io/spring/docs/{spring_version}/javadoc-api/org/springframework/http/converter/json/MappingJackson2HttpMessageConverter.html[`MappingJackson2HttpMessageConverter`] is automatically chosen to convert the `Greeting` instance to JSON.
 
 
-== Make the application executable
+*** Make the application executable
 
 Although it is possible to package this service as a traditional link:/understanding/WAR[WAR] file for deployment to an external application server, the simpler approach demonstrated below creates a standalone application. You package everything in a single, executable JAR file, driven by a good old Java `main()` method. Along the way, you use Spring's support for embedding the link:/understanding/Tomcat[Tomcat] servlet container as the HTTP runtime, instead of deploying to an external instance.
 
 
 `src/main/java/hello/Application.java`
-[source,java]
-----
+
+```
 include::complete/src/main/java/hello/Application.java[]
-----
+```
 
 include::https://raw.githubusercontent.com/spring-guides/getting-started-macros/master/spring-boot-application.adoc[]
 
@@ -132,32 +124,32 @@ include::https://raw.githubusercontent.com/spring-guides/getting-started-macros/
 Logging output is displayed. The service should be up and running within a few seconds.
 
 
-== Test the service
+*** Test the service
 
 Now that the service is up, visit http://localhost:8080/greeting, where you see:
 
-[source,json]
-----
+
+```
 {"id":1,"content":"Hello, World!"}
-----
+```
 
 Provide a `name` query string parameter with http://localhost:8080/greeting?name=User. Notice how the value of the `content` attribute changes from "Hello, World!" to "Hello User!":
 
-[source,json]
-----
+
+```
 {"id":2,"content":"Hello, User!"}
-----
+```
 
 This change demonstrates that the `@RequestParam` arrangement in `GreetingController` is working as expected. The `name` parameter has been given a default value of "World", but can always be explicitly overridden through the query string.
 
 Notice also how the `id` attribute has changed from `1` to `2`. This proves that you are working against the same `GreetingController` instance across multiple requests, and that its `counter` field is being incremented on each call as expected.
 
 
-== Summary
+*** Summary
 
 Congratulations! You've just developed a RESTful web service with Spring.
 
-== See Also
+*** See Also
 
 The following guides may also be helpful:
 
@@ -179,4 +171,3 @@ The following guides may also be helpful:
 * https://spring.io/guides/gs/rest-hateoas/[Building a Hypermedia-Driven RESTful Web Service]
 * https://spring.io/guides/gs/circuit-breaker/[Circuit Breaker]
 
-include::https://raw.githubusercontent.com/spring-guides/getting-started-macros/master/footer.adoc[]
